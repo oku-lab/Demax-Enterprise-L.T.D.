@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Music of [Father's Name] — Tribute</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+    <link rel="shortcut icon" href="img/DE MAX.png" type="image/x-icon">
+  <style>
+    /* ---------- Palette & Global ---------- */
+    :root {
+      --glass-dark: rgba(10, 12, 20, 0.45);
+      --glass-light: rgba(255, 255, 255, 0.04);
+      --accent-blue: #0d6efd;
+      /* bootstrap primary-ish */
+      --accent-red: #dc3545;
+      /* bootstrap danger-ish */
+      --gold: #d4a55a;
+      --muted: #bfc6d3;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(145deg, #3b3b3b 5%, black 50%);
+      background-repeat: no-repeat;
+      height: 100%;
+      background-attachment: fixed;
+      /* keeps it stable while scrolling */
+      background-size: cover;
+      color: #eef2f8;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .container-lg {
+      max-width: 1200px;
+    }
+
+    /* ---------- Glassy panels ---------- */
+    .glass {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.071), rgba(255, 255, 255, 0.059));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* ---------- HERO CAROUSEL (full height) ---------- */
+    .hero-carousel {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-carousel .carousel-inner,
+    .hero-carousel .carousel-item {
+      height: 100%;
+    }
+
+    .hero-carousel .carousel-item img {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.6) saturate(1.02);
+    }
+
+    /* overlay hero-content (the exact block you asked for) */
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      pointer-events: none;
+      /* so carousel controls still usable */
+    }
+
+    .hero-card {
+      pointer-events: auto;
+      /* allow clicks on buttons */
+      text-align: center;
+      padding: 2rem;
+      max-width: 980px;
+      margin: 0 1rem;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 10px 40px rgba(2, 6, 23, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .title-serif {
+        font-family: "Lobster Two", sans-serif;
+      font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #fff;
+      margin: 0;
+    }
+
+    .tagline {
+      color: var(--muted);
+      margin-top: .6rem;
+      font-size: 1rem;
+    }
+
+    .hero-card .muted {
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+
+    .btn-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(212, 165, 90, 0.12);
+    }
+
+    /* ---------- Carousel controls style ---------- */
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+    }
+
+    /* ---------- Featured Tracks - grid of cards ---------- */
+    .tracks-grid {
+      margin-top: 1.5rem;
+    }
+
+    .track-card {
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(155deg, #0a01b352 20%, rgba(0, 0, 0, 0.546));
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      transition: transform .28s ease, box-shadow .28s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      backdrop-filter: blur(6px);
+    }
+
+    .track-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 14px 40px rgba(2, 6, 23, 0.6);
+    }
+
+    .track-cover {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .track-body {
+      padding: 1rem 1rem 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      flex: 1;
+    }
+
+    .track-meta {
+      font-size: .95rem;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+    .track-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      margin: 0;
+    }
+
+    /* gradient play button (blue -> red) */
+    .btn-play {
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-red));
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-weight: 700;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .btn-play:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(13, 110, 253, 0.14);
+    }
+
+    .play-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .5rem;
+      margin-top: auto;
+    }
+
+    /* small status dot */
+    .playing-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-red));
+      box-shadow: 0 0 10px rgba(212, 65, 65, 0.12);
+      display: inline-block;
+      margin-right: .5rem;
+    }
+
+    /* ---------- About / Albums / CTA styling ---------- */
+    .section-title {
+       font-family: "Lobster Two", sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: #fff;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .about,
+    .albums,
+    .newsletter {
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+    }
+
+    .album-img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      color: var(--muted);
+      margin-top: 1.5rem;
+      margin-bottom: 2.2rem;
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    /* ---------- Responsive tweaks ---------- */
+    @media (max-width:991px) {
+      .hero-card {
+        padding: 1.25rem;
+      }
+
+      .title-serif {
+        font-size: clamp(1.6rem, 6vw, 2.4rem);
+      }
+    }
+
+    @media (max-width:575px) {
+      .hero-card {
+        padding: .9rem;
+      }
+
+      .tagline {
+        font-size: .95rem;
+      }
+
+      .btn-play {
+        padding: 8px 14px;
+        font-size: .95rem;
+      }
+    }
+
+    :root {
+      --red: #e63946;
+      --blue: #1d3557;
+      --glass: rgba(255, 255, 255, 0.08);
+    }
+
+
+
+    /* ---------- HERO CAROUSEL ---------- */
+    .hero-carousel {
+      position: relative;
+      height: 70vh;
+      overflow: hidden;
+    }
+
+    .hero-carousel .carousel-inner,
+    .hero-carousel .carousel-item {
+      height: 100%;
+    }
+
+    .hero-carousel .carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.6) saturate(1.02);
+    }
+
+    @media (max-width:768px) {
+      .hero-carousel {
+        height: 60vh;
+      }
+    }
+
+    /* overlay text */
+    .hero-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.21);
+      padding: 2rem;
+    }
+
+    .title-serif {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 700;
+    }
+
+    .tagline {
+      color: #f1e6d2;
+      font-size: 1rem;
+      margin-top: .5rem;
+    }
+
+    /* gradient button */
+    .gradient-btn {
+      background: linear-gradient(90deg, var(--blue), var(--red));
+      border: none;
+      color: white;
+      padding: .6rem 1.4rem;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all .3s ease;
+    }
+
+    .gradient-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-outline-light {
+      border-radius: 30px;
+    }
+
+    #demax {
+      border: 1px solid rgba(141, 106, 106, 0.2);
+      border-radius: 10px;
+      padding: 0px 10px;
+      padding-top: 7px;
+      font-family: "Lobster Two", sans-serif;
+      font-weight: 500;
+      font-style: normal;
+      -webkit-text-stroke: .9px black;
+      background: linear-gradient(270deg, #0e02e24d 30%, rgba(246, 3, 3, 0.546));
+      animation: gradientMove 3s ease infinite;
+      background-size: 600% 600%;
+    }
+
+    .body {
+      background: linear-gradient(145deg, #3b3b3b 5%, black 50%);
+      background-repeat: no-repeat;
+      height: 100%;
+      background-attachment: fixed;
+      /* keeps it stable while scrolling */
+      background-size: cover;
+
+    }
+  </style>
+</head>
+
+<body class="mx-5">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-md navbar-dark mt-3 mb-3 " style="margin: 0px -30px;" id="navbar"
+    aria-label="Fourth navbar example">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Brand -->
+      <a id="demax" class="navbar-brand fw-bold fs-3" href="#" style="color: #9ea0d8; "><i><img class=" mb-3"
+            src="img/DE MAX.png" alt="" height="40px" width="40px">De-MAX</i></a>
+
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04"
+        aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Middle links -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarsExample04">
+        <ul class="navbar-nav mb-2 mb-md-0 gap-4 fs-4" id="ul">
+          <li class="nav-item" id="link">
+            <a class="nav-link active" aria-current="page" href="./home.html">Home</a>
+          </li>
+          <li class="nav-item"  id="link">
+            <a class="nav-link" href="./about.html">About</a>
+          </li>
+          <li class="nav-item"  id="link">
+            <a class="nav-link" href="./music.html" id="music">Music</a>
+          </li>
+          <li class="nav-item"  id="link">
+            <a class="nav-link active" href="./contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right-side buttons -->
+      <div class="d-none d-md-flex gap-3">
+        <a id="demax2" class="navbar-brand fw-bold fs-4 text-light" href="#"><i>Welcome back 🎉</i></a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- HERO: Bootstrap Carousel (full-height) with overlay hero-content -->
+  <header id="home" class="hero-carousel carousel slide m-0 animate-on-scroll animate-up" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-3">
+      <div class="carousel-item active">
+        <img src="img/chess game.jpg" alt="slide1">
+      </div>
+      <div class="carousel-item rounded-3">
+        <img src="img/naked music.jpg" alt="slide2">
+      </div>
+      <div class="carousel-item rounded-3">
+        <img src="img/enjoying music.jpg" alt="slide3">
+      </div>
+      <div class="carousel-item rounded-3">
+        <img src="img/medium-shot-smiley-guy-listening-music.jpg" alt="slide3">
+      </div>
+      <div class="carousel-item rounded-3">
+        <img src="img/rehearsal 3.jpg" alt="slide3">
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-card">
+        <p class="mb-1 muted">A curated archive</p>
+        <h1 class="title-serif">The Music of <span style="color: #0309b9;">Master Efiong</span></h1>
+        <p class="tagline">A lifetime of melody and rhythm — recorded, remembered, and shared.</p>
+
+        <div class="d-flex justify-content-center gap-2 mt-3">
+          <a href="#discography" class="btn btn-outline-light btn-lg">Explore Discography</a>
+          <a href="#listen" class="btn btn-lg rounded-5 text-white" id="rec-card">Listen</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container-fluid my-5">
+    <div class="row g-4">
+      <!-- LEFT: Biography -->
+      <section class="col-sm-12 col-lg-12"> 
+        <div class="p-3 rounded-4 animate-on-scroll animate-left " id="rec-carddad">
+          <div class="d-flex align-items-start gap-3">
+            <img src="img/obongm.png" alt="[Father's Photo]" class="rounded"
+              style="width:140px; height:140px; object-fit:cover;">
+            <div>
+              <h2  style=" margin:0 0 .25rem 0; font-family: Lobster Two, sans-serif;">The Artist &amp; His Journey</h2>
+              <p class="muted small mb-2">From humble beginnings to standing ovations — a short intro.</p>
+              <p style="line-height:1.45; color:#e9eefb; font-size:0.98rem;">
+                <!-- Replace this biography text -->
+                [Insert a heartfelt biography here. Talk about early life, influences, major milestones, awards,
+                collaborators, and the story that shaped his sound.]
+              </p>
+
+              <div class="mt-2">
+                <a href="#behind" class="btn btn-outline-light btn-sm me-2">Stories & Lyrics</a>
+                <a href="#contact" class="btn btn-sm text-white rounded-4" id="rec-card">Contact / Licensing</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick facts -->
+        <div class="mt-4 p-3 rounded-4 animate-on-scroll animate-right " id="rec-carddad">
+          <h2 class="mb-2" style=" font-family: Lobster Two, sans-serif;">Quick Facts</h2>
+          <ul class="muted small mb-0">
+            <li>Genre: [e.g., Afro-soul / Jazz]</li>
+            <li>Active: [Year — Year]</li>
+            <li>Notable album: [Album Name]</li>
+            <li>Awards: [List]</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- RIGHT: Discography / Featured Tracks (grid cards with play/pause) -->
+      <section class="col-lg-12">
+        <div id="discography">
+          <h2  style="  font-family: Lobster Two, sans-serif;">Discography</h2>
+          <p class="muted small">A curated grid of notable tracks — tap play on any card to listen.</p>
+
+          <!-- Grid of tracks -->
+          <div id="listen" class="tracks-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mt-3">
+            <!-- TRACK CARD 1 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/green audio.jpg"
+                  alt="Track 1 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Song • 1999</div>
+                    <h3 class="track-title">The lord of host is here.</h3>
+                    <p class="muted small mb-0">A heartfelt single that defined his early sound.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-1" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-1">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample one" data-audio="audio1"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio1" preload="metadata"
+                        src="audio/obong's music 1.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACK CARD 2 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/red audio.png" alt="Track 2 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Single • 2004</div>
+                    <h3 class="track-title">Rise, let's give thanks to God</h3>
+                    <p class="muted small mb-0">An intimate studio recording with rich melodies.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-2" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-2">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample two" data-audio="audio2"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio2" preload="metadata"
+                        src="audio/obong's music 2.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACK CARD 3 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/purple audio.png" alt="Track 3 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Album • 2012</div>
+                    <h3 class="track-title">Jehovah super power.</h3>
+                    <p class="muted small mb-0">A later-career ballad known for its storytelling.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-3" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-3">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample three" data-audio="audio3"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio3" preload="metadata"
+                        src="audio/obong's music 3.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACK CARD 4 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/green audio.jpg" alt="Track 4 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Album • 2014</div>
+                    <h3 class="track-title">Give thanks</h3>
+                    <p class="muted small mb-0">An experimental track with lush arrangements.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-4" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-4">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample four" data-audio="audio4"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio4" preload="metadata"
+                        src="audio/obong's music 4.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACK CARD 5 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/red audio.png" alt="Track 5 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Album • 2016</div>
+                    <h3 class="track-title">In the morning, we see a bright new sunshine.</h3>
+                    <p class="muted small mb-0">A rhythmic piece blending traditional and modern sounds.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-5" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-5">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample five" data-audio="audio5"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio5" preload="metadata"
+                        src="audio/obong's music 5.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACK CARD 6 -->
+            <div class="col animate-on-scroll animate-up">
+              <div class="track-card h-100">
+                <img class="track-cover" src="img/purple audio.png" alt="Track 6 cover">
+                <div class="track-body">
+                  <div>
+                    <div class="track-meta">Album • 2019</div>
+                    <h3 class="track-title">Execellent is your name.</h3>
+                    <p class="muted small mb-0">A reflective closing track with soft piano.</p>
+                  </div>
+
+                  <div class="play-row">
+                    <div class="d-flex align-items-center">
+                      <span id="dot-6" class="playing-dot" style="display:none;"></span>
+                      <small class="muted" id="status-6">Stopped</small>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-play" aria-label="Play sample six" data-audio="audio6"
+                        onclick="toggleTrack(this)">▶ Play</button>
+                      <audio id="audio6" preload="metadata"
+                        src="audio/obong's music 6.mp3"></audio>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add more track cards as needed; follow the same structure:
+                 - unique ids for audio (audio7, audio8...)
+                 - corresponding status & dot elements (status-7, dot-7...) -->
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PHOTO GALLERY -->
+    <section id="gallery" class="mt-5">
+      <h3 class="section-title">Echoes of Time</h3>
+      <p class="muted small text-center">Moments from performances, studio sessions, and life on the road.</p>
+
+      <div class="row g-3 mt-3">
+        <div class="col-6 col-md-4">
+          <div class="glass album-img p-0  animate-on-scroll animate-left">
+            <img src="img/rehearsal 1.jpg" class="album-img" alt="gallery1">
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="glass album-img p-0 animate-on-scroll animate-up">
+            <img src="img/rehaearsal 2.jpg" class="album-img" alt="gallery2">
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="glass album-img p-0 animate-on-scroll animate-right">
+            <img src="img/rehearsal 3.jpg" class="album-img" alt="gallery3">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEHIND THE MUSIC -->
+    <section id="behind" class="mt-5">
+      <h3 class="section-title">Behind the Music</h3>
+      <p class="muted small text-center">Lyrics, stories, and the inspiration behind select tracks.</p>
+
+      <div class="row mt-3 g-3">
+        <div class="col-12 col-md-6 animate-on-scroll animate-left">
+          <div class="glass p-3 ">
+            <h5>Jehovah might warrior</h5>
+            <p class="muted small mb-2">An anecdote about this song: where it was written, who helped, and the feeling
+              it captures.</p>
+            <pre
+              style="white-space:pre-wrap;color:#e9eefb;font-family:inherit;"></pre>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 animate-on-scroll animate-right">
+          <div class="glass p-3">
+            <h5>Execellent is they name</h5>
+            <p class="muted small mb-2">Story: inspiration, context, and any notable performance moments.</p>
+            <pre style="white-space:pre-wrap;color:#e9eefb;font-family:inherit;"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / Contact -->
+    <section id="contact" class="mt-5 glass p-3 text-center animate-on-scroll animate-up">
+      <h3 style="font-family:'Playfair Display', serif;">His Music Lives On</h3>
+      <p class="muted small">Share the legacy or reach out for licensing, collaborations, or archive access.</p>
+      <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+        <a class="btn btn-lg text-white rec-card" href="#contactForm">Contact / Licensing</a>
+        <a class="btn btn-outline-light btn-lg" href="#" onclick="shareTwitter();return false;">Share on Twitter</a>
+        <a class="btn btn-outline-light btn-lg" href="#" onclick="shareFB();return false;">Share on Facebook</a>
+      </div>
+    </section>
+
+   
+  </main>
+  <footer class="footer pt-5 pb-3 border-top mt-5">
+      <div class="container">
+        <!-- Brand + About -->
+        <h1 class="brand-accent fs-2 culu"><img class=" mb-3" src="img/DE MAX.png" alt="" height="40px" width="40px">
+          Demax production L.T.D.</h1>
+        <p class="text-white">
+          Empowering teams with next-gen tools to make ideas clearer,
+          smarter, and more impactful 🚀.
+        </p>
+        <div class=" gy-5 row">
+          <div class="col-md-4 me-5">
+            <h2 class="text-white foothead " style="font-family:Lobster Two, sans-serif;">Contact us:</h2>
+            <div class="social-icons" style="font-family:Imperial Script, cursive; color: #cacaca;">
+              <a href="https//facebook.com"><i class="bi bi-facebook"><img src="img/facebooky.png" alt="" height="40px"
+                    width="40px"></i></a>
+              <a href="https//twitter.com"><i class="bi bi-twitter"><img src="img/twittery.png" alt="" height="40px"
+                    width="40px"></i></a>
+              <a href="https//instgram.com"><i class="bi bi-instagram"><img src="img/instrgrammy.png" alt=""
+                    height="40px" width="40px"></i></a>
+              <a href="https//whatsapp.com"><i class="bi bi-whatsapp"><img src="img/whatsappy.png" alt="" height="40px"
+                    width="40px"></i></a>
+            </div>
+          </div>
+
+          <!-- Product -->
+          <div class="col-md-2 me-5">
+            <h2 class="fw-bold  text-white foothead" style="font-family:Lobster Two, sans-serif; font-style: italic;">
+              Product</h2>
+            <ul class="list-unstyled fs-5"
+              style="font-family:Imperial Script, cursive; font-style: italic; color: #cacaca;">
+              <li><a href="#" class="text-decoration-none text-white">Features</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Pricing</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Integrations</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Changelog</a></li>
+            </ul>
+          </div>
+
+          <!-- Resources -->
+          <div class="col-md-2 me-5">
+            <h2 class="fw-bold text-white foothead" style="font-family:Lobster Two, sans-serif; font-style: italic;">
+              Resources</h2>
+            <ul class="list-unstyled fs-5"
+              style="font-family:Imperial Script, cursive; font-style: italic; color: #cacaca;">
+              <li><a href="#" class="text-decoration-none text-white">Docs</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Tutorials</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Blog</a></li>
+              <li><a href="#" class="text-decoration-none text-white">Support</a></li>
+            </ul>
+          </div>
+
+          <!-- Company -->
+          <div class="col-md-2 me-5">
+            <h2 class="fw-bold foothead text-white" style="font-family:Lobster Two, sans-serif; font-style: italic;">
+              Company</h2>
+            <ul class="list-unstyled fs-5" style="font-family:Imperial Script, cursive; color: #cacaca;">
+              <li><a href="./home.html" class="text-decoration-none text-white">Home</a></li>
+              <li><a href="./about.html" class="text-decoration-none text-white">About</a></li>
+              <li><a href="./contact.html" class="text-decoration-none text-white">Contact</a></li>
+              <li><a href="./music.html" class="text-decoration-none text-white">Music</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Bottom -->
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4 pt-3 border-top">
+          <p class="mb-0 " style="color: #cacaca;">&copy; 2025 demax production. All rights reserved.</p>
+          <div>
+            <a href="#" class="text-decoration-none text-white me-3">Privacy Policy</a>
+            <a href="#" class="text-decoration-none text-white me-3">Terms of Service</a>
+            <a href="#" class="text-decoration-none text-white">Cookies Settings</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+  <!-- Bootstrap Bundle -->
+  <script src="img/https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* -------------------------
+       Utilities & small helpers
+       ------------------------- */
+    // safely set year if element exists (prevents a script-breaking error)
+    const yearEl = document.getElementById('year');
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+
+    function shareTwitter() {
+      const text = encodeURIComponent("Remembering [Father's Name] — a lifetime of melody. Visit this tribute:");
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    }
+    function shareFB() {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+    }
+
+    /* -------------------------
+       Track play/pause logic
+       - Each card button has data-audio="audioId"
+       - Only one audio plays at a time
+       - Button text toggles between Play / Stop and indicator updates
+       ------------------------- */
+    let currentlyPlaying = null; // { audioEl, buttonEl, dotEl, statusEl }
+
+    function toggleTrack(btn) {
+      try {
+        const audioId = btn.getAttribute('data-audio');
+        if (!audioId) return;
+        const audioEl = document.getElementById(audioId);
+        if (!audioEl) return;
+
+        // If another track is playing, stop it first
+        if (currentlyPlaying && currentlyPlaying.audioEl !== audioEl) {
+          stopCurrent();
+        }
+
+        // If clicked audio is paused: play it; else stop it
+        if (audioEl.paused) {
+          audioEl.play().catch(err => {
+            console.warn('Playback failed:', err);
+          });
+          // update UI
+          btn.textContent = '⏸ Stop';
+          btn.setAttribute('aria-pressed', 'true');
+
+          const idxMatch = audioId.match(/\d+$/);
+          const idx = idxMatch ? idxMatch[0] : '';
+          const dot = document.getElementById('dot-' + idx);
+          const status = document.getElementById('status-' + idx);
+          if (dot) dot.style.display = 'inline-block';
+          if (status) status.textContent = 'Playing';
+
+          currentlyPlaying = { audioEl, buttonEl: btn, dotEl: dot, statusEl: status };
+
+          // When audio ends, reset UI
+          audioEl.onended = () => {
+            resetButton(btn, idx);
+            currentlyPlaying = null;
+          };
+        } else {
+          // stop it
+          audioEl.pause();
+          audioEl.currentTime = 0;
+          const idxMatch = audioId.match(/\d+$/);
+          const idx = idxMatch ? idxMatch[0] : '';
+          resetButton(btn, idx);
+          currentlyPlaying = null;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function stopCurrent() {
+      if (!currentlyPlaying) return;
+      try {
+        const { audioEl, buttonEl, dotEl, statusEl } = currentlyPlaying;
+        audioEl.pause();
+        audioEl.currentTime = 0;
+        // reset UI
+        if (buttonEl) { buttonEl.textContent = '▶ Play'; buttonEl.removeAttribute('aria-pressed'); }
+        if (dotEl) dotEl.style.display = 'none';
+        if (statusEl) statusEl.textContent = 'Stopped';
+        currentlyPlaying = null;
+      } catch (e) { console.warn(e); }
+    }
+
+    function resetButton(btn, idx) {
+      if (btn) { btn.textContent = '▶ Play'; btn.removeAttribute('aria-pressed'); }
+      if (!idx) return;
+      const dot = document.getElementById('dot-' + idx);
+      const status = document.getElementById('status-' + idx);
+      if (dot) dot.style.display = 'none';
+      if (status) status.textContent = 'Stopped';
+    }
+
+    // Optional: keyboard space toggles the currently highlighted play button (small UX)
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        // prevent scrolling
+        e.preventDefault();
+        if (currentlyPlaying) {
+          // stop current
+          stopCurrent();
+        } else {
+          // play first track by default
+          const firstBtn = document.querySelector('[data-audio="audio1"]');
+          if (firstBtn) firstBtn.click();
+        }
+      }
+    });
+
+    const elements = document.querySelectorAll('.animate-on-scroll');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
+        });
+      }, { threshold: 0.2 });
+
+      elements.forEach(el => observer.observe(el));
+
+  </script>
+</body>
+
+</html>
